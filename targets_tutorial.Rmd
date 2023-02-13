@@ -1,0 +1,77 @@
+---
+title: "Learning the `targets` package"
+author: "Sophie Breitbart"
+date: "February 2023"
+output:
+  html_document:
+    toc: true
+    toc_float:
+      collapsed: false
+      smooth_scroll: false
+---
+
+I used this tutorial: https://books.ropensci.org/targets/
+
+# Set up project
+## Set up data
+
+Store original data in a folder I'd just call "data". Then make a copy, rename it to "data.csv", and put it in the root folder.
+
+```{r echo=FALSE, warning=FALSE }
+library(tidyverse)
+```
+
+
+```{r}
+read.csv("data.csv") %>%
+  head()
+```
+
+## Set up functions
+
+Create a folder called "R" and, within that folder, make a script called "functions.R". This script will contain only functions. This package will carry out a pipeline by exclusively performing self-contained function after function.
+
+## Set up _targets.R
+
+Create an R script called "_targets.R" in the root folder. Use the same setup as the one in this project.
+
+
+# Run this R script, "_targets.R"
+This will always be in the root folder.
+```{r warning=FALSE }
+source("_targets.R")
+```
+
+
+# Useful things to do before running project
+
+## Check pipeline is correct by getting info re: each target
+```{r warning=FALSE }
+tar_manifest(fields = all_of("command"))
+```
+
+## Visualize pipeline w/flow chart
+Read from left to right.
+```{r warning=FALSE }
+tar_visnetwork()
+```
+
+# Run the pipeline
+```{r}
+tar_make()
+```
+
+# Review output
+## Inspect plot
+```{r warning=FALSE }
+tar_read(plot)
+```
+
+## Reinspect flow chart pipeline and ask: is everything up to date?
+```{r warning=FALSE}
+tar_visnetwork()
+```
+
+```{r warning=FALSE }
+tar_outdated()
+```
